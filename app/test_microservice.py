@@ -7,7 +7,7 @@ class TestMicroservice(unittest.TestCase):
         """
         try:
             # connect to microservice
-            with urllib.request.urlopen("http://localhost:5000/test") as url:
+            with urllib.request.urlopen("http://127.0.0.1:5000/test") as url:
                 data = json.loads(url.read().decode())
                 print(data)
         except Exception as e:
