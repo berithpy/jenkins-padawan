@@ -16,7 +16,7 @@ node {
 
   stage('Test'){
     echo 'Testing'
-    sh  "python app/test_microservice.py"
+    sh  "python3 app/test_microservice.py"
   }
 
   stage('Push'){
