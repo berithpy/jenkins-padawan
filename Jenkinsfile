@@ -16,14 +16,14 @@ node {
 
   stage('Test'){
     echo 'Testing'
-    sh  "python test_microservice.py"
+    sh  "python app/test_microservice.py"
   }
 
   stage('Push'){
     echo 'Puhsing'
     sh "docker push " + imageName
   }
-  
+
   stage('Clean'){
     echo 'Cleaning'
     sh 'docker rmi -f \$(docker images flask_app -q | awk \'!a[$0]++\') || echo \'Image not found.\''

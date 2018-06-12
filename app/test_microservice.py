@@ -1,4 +1,4 @@
-import unittest
+import unittest, urllib.request, json
 
 class TestMicroservice(unittest.TestCase):
     def test_connections(self):
@@ -7,17 +7,11 @@ class TestMicroservice(unittest.TestCase):
         """
         try:
             # connect to microservice
-            if isinstance(savitest_config,str):
-                if "couldn't" in savitest_config:
-                    self.fail(savitest_config)
-                if "ROC configuration" in savitest_config:
-                    self.fail(savitest_config)
+            with urllib.request.urlopen("http://localhost:5000/test") as url:
+                data = json.loads(url.read().decode())
+                print(data)
         except Exception as e:
-            self.fail("Could not get the zoho-config.")
-        try:
-            k8_config_provider.protodump(savitest_config.__dict__)
-        except Exception as e:
-            self.fail("Could not dump the zoho-config.")
+            self.fail("Could not communicate with the server.")
 
 
 if __name__ == '__main__':
