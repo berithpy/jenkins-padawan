@@ -1,12 +1,15 @@
-from flask import Flask, request, Response
+from flask import Flask, request, Response, jsonify
 app = Flask(__name__)
 
-@app.route("/", methods=['POST','GET'])
+
+@app.route("/", methods=['POST', 'GET'])
 def basic_api():
-    return Response(response={'result':'ok'}, status=200, mimetype='application/json')
-@app.route("/test", methods=['POST','GET'])
-def basic_api():
-    return Response(response={'result':'ok'}, status=200, mimetype='application/json')
+    return jsonify({'result': 'workinsg!'})
+
+
+@app.route("/test", methods=['POST', 'GET'])
+def test_api():
+    return jsonify({'test': 'test value'})
 
 
 if __name__ == '__main__':
