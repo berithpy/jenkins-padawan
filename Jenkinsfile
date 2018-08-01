@@ -15,7 +15,7 @@ node {
   }
 
   stage('Test'){
-    echo "Testing removed for some problems i've been having with the docker network!"
+    echo "Testing"
     // sh  "python3 app/test_microservice.py"
   }
 
