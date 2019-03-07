@@ -1,16 +1,16 @@
 pipeline {
+  environment{
+        checkout scm
+        // Docer registry to tag the image and then push it.
+        dockerRegistry = "localhost:5001"
+        imageName = "${dockerRegistry}/flask-app:latest"
+      }
+  }
   agent any
   stages{
     stage('Prepare'){
       steps{
-        checkout scm
-        // Create a short commit-id to tag the images.
-        sh "git rev-parse --short HEAD > commit-id"
-        def commitId = readFile('commit-id').trim()
-        // Docer registry to tag the image and then push it.
-        def dockerRegistry = "localhost:5001"
-        def imageName = "${dockerRegistry}/flask-app:${commitId}"
-      }
+        
     }
     stage ('Build') {
       steps{
