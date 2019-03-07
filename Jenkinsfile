@@ -5,11 +5,6 @@ pipeline {
       }
   agent any
     stages{
-      stage('Prepare'){
-          steps{
-            def scmVars = checkout scm
-        }
-      }
       stage ('Build') {
         steps{
           echo 'Building'
