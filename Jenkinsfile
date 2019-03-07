@@ -1,4 +1,5 @@
 pipeline {
+  agent{any}
   checkout scm
   // Create a short commit-id to tag the images.
   sh "git rev-parse --short HEAD > commit-id"
