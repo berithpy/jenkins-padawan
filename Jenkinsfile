@@ -2,6 +2,7 @@ pipeline {
   environment{
         dockerRegistry = "localhost:5001"
         imageName = "${dockerRegistry}/flask-app:latest"
+        deployContainerName = "flask_app"
       }
   agent any
     stages{
@@ -14,7 +15,7 @@ pipeline {
       stage('Deploy'){
         steps{
           echo 'Deploying'
-          sh  "docker run -d -p 5000:5000 --name ${imageName} ${imageName}"
+          sh  "docker run -d -p 5000:5000 --name ${deployContainerName} ${imageName}"
         }
       }
       stage('Test'){
