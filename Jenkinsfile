@@ -1,5 +1,5 @@
 pipeline {
-  agent{any}
+  agent any
   checkout scm
   // Create a short commit-id to tag the images.
   sh "git rev-parse --short HEAD > commit-id"
@@ -8,28 +8,34 @@ pipeline {
   def dockerRegistry = "localhost:5001"
   def imageName = "${dockerRegistry}/flask-app:${commitId}"
   stage ('Build') {
-    echo 'Building'
-    sh "docker build . -t flask_app -t ${imageName} --no-cache"
+    steps{
+      echo 'Building'
+      sh "docker build . -t flask_app -t ${imageName} --no-cache"
+    }
   }
-
   stage('Deploy'){
-    echo 'Deploying'
-    sh  "docker run -d -p 5000:5000 --name ${imageName} ${imageName}"
+    steps{
+      echo 'Deploying'
+      sh  "docker run -d -p 5000:5000 --name ${imageName} ${imageName}"
+    }
   }
-
   stage('Test'){
-    echo "Testing"
-    sh "curl ${imageName}:5000"
+    steps{
+      echo "Testing"
+      sh "curl ${imageName}:5000"
+    }
   }
-
   stage('Push'){
-    echo 'Puhsing'
-    sh "docker push " + imageName
+    steps{
+      echo 'Puhsing'
+      sh "docker push " + imageName
+    }
   }
-
   stage('Clean'){
-    echo 'Cleaning'
-    sh 'docker stop \$(docker images flask_app -q | awk \'!a[$0]++\') || echo \'Container not running.\''
-    sh 'docker rmi -f \$(docker images flask_app -q | awk \'!a[$0]++\') || echo \'Image not found.\''
+    steps{
+      echo 'Cleaning'
+      sh 'docker stop \$(docker images flask_app -q | awk \'!a[$0]++\') || echo \'Container not running.\''
+      sh 'docker rmi -f \$(docker images flask_app -q | awk \'!a[$0]++\') || echo \'Image not found.\''
+    }
   }
 }
