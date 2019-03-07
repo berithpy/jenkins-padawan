@@ -1,4 +1,4 @@
-node {
+pipeline {
   checkout scm
   // Create a short commit-id to tag the images.
   sh "git rev-parse --short HEAD > commit-id"
@@ -13,11 +13,12 @@ node {
 
   stage('Deploy'){
     echo 'Deploying'
-    sh  "docker run -d -p 5000:5000 ${imageName}"
+    sh  "docker run -d -p 5000:5000 --name ${imageName} ${imageName}"
   }
 
   stage('Test'){
     echo "Testing"
+    sh "curl ${imageName}:5000"
   }
 
   stage('Push'){
