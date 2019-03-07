@@ -3,7 +3,6 @@ pipeline {
         dockerRegistry = "localhost:5001"
         imageName = "${dockerRegistry}/flask-app:latest"
       }
-  }
   agent any
   stages{
     stage('Prepare'){
