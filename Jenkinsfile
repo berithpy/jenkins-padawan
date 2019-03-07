@@ -1,9 +1,11 @@
 node {
   checkout scm
-  sh "git rev-parse --short HEAD > .git/commit-id"
-  commitId = readFile('.git/commit-id').trim()
-  def registry = "localhost:5001"
-  def imageName = "${registry}/flask-app:${commitId}"
+  // Create a short commit-id to tag the images.
+  sh "git rev-parse --short HEAD > commit-id"
+  commitId = readFile('commit-id').trim()
+  // Docer registry to tag the image and then push it.
+  def dockerRegistry = "localhost:5001"
+  def imageName = "${dockerRegistry}/flask-app:${commitId}"
   stage ('Build') {
     echo 'Building'
     sh "docker build . -t flask_app -t ${imageName} --no-cache"
@@ -16,7 +18,6 @@ node {
 
   stage('Test'){
     echo "Testing"
-    // sh  "python3 app/test_microservice.py"
   }
 
   stage('Push'){
@@ -26,6 +27,7 @@ node {
 
   stage('Clean'){
     echo 'Cleaning'
+    sh 'docker stop \$(docker images flask_app -q | awk \'!a[$0]++\') || echo \'Container not running.\''
     sh 'docker rmi -f \$(docker images flask_app -q | awk \'!a[$0]++\') || echo \'Image not found.\''
   }
 }
