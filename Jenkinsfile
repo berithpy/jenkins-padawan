@@ -6,7 +6,7 @@ pipeline {
         checkout scm
         // Create a short commit-id to tag the images.
         sh "git rev-parse --short HEAD > commit-id"
-        commitId = readFile('commit-id').trim()
+        def commitId = readFile('commit-id').trim()
         // Docer registry to tag the image and then push it.
         def dockerRegistry = "localhost:5001"
         def imageName = "${dockerRegistry}/flask-app:${commitId}"
