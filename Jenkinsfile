@@ -1,7 +1,5 @@
 pipeline {
   environment{
-        checkout scm
-        // Docer registry to tag the image and then push it.
         dockerRegistry = "localhost:5001"
         imageName = "${dockerRegistry}/flask-app:latest"
       }
@@ -10,7 +8,7 @@ pipeline {
   stages{
     stage('Prepare'){
       steps{
-        
+        def scmVars = checkout scm
     }
     stage ('Build') {
       steps{
