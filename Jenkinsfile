@@ -3,6 +3,7 @@ pipeline {
         dockerRegistry = "localhost:5001"
         imageName = "${dockerRegistry}/flask-app:latest"
         deployContainerName = "flask_app"
+        deployIp = "172.17.0.1"
       }
   agent any
     stages{
@@ -21,7 +22,7 @@ pipeline {
       stage('Test'){
         steps{
           echo "Testing"
-          sh "curl (docker inspect -f '\{\{range .NetworkSettings.Networks\}\}\{\{.IPAddress\}\}\{\{end\}\}' jovial_euclid):5000"
+          sh "curl ${deployIp}:5000"
         }
       }
       stage('Push'){
@@ -30,14 +31,13 @@ pipeline {
           sh "docker push " + imageName
         }
       }
-      stage('Clean'){
-        steps{
-          echo 'Cleaning'
-          sh 'docker stop \$(docker images flask_app -q | awk \'!a[$0]++\') || echo \'Container not running.\''
-          sh 'docker rmi -f \$(docker images flask_app -q | awk \'!a[$0]++\') || echo \'Image not found.\''
-        }
+    }
+    post{
+      always{
+        echo 'Cleaning'
+        sh 'docker stop ${deployContainerName} || echo \'Container not running.\''
+        sh 'docker rm ${deployContainerName} || echo \'Container not deployed.\''
       }
-
     }
   }
 
