@@ -21,7 +21,7 @@ pipeline {
       stage('Test'){
         steps{
           echo "Testing"
-          sh "curl (docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' jovial_euclid):5000"
+          sh "curl (docker inspect -f '\{\{range .NetworkSettings.Networks\}\}\{\{.IPAddress\}\}\{\{end\}\}' jovial_euclid):5000"
         }
       }
       stage('Push'){
